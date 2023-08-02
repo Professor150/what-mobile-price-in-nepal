@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "701150213123",
+    "project_id": "what-mobile-price-in-nepal",
+    "storage_bucket": "what-mobile-price-in-nepal.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:701150213123:android:a52f2336cc74795affca36",
+        "android_client_info": {
+          "package_name": "com.example.mobile_news_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "701150213123-i4465ur41gb29ehct5pcvilm1874ksnr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDjVcUOCicmL4j8WMmQtkObkAo3FNZjlog"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "701150213123-i4465ur41gb29ehct5pcvilm1874ksnr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
