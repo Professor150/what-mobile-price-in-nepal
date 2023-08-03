@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mobile_news_app/feature/home_screen/exports.dart';
-import 'package:mobile_news_app/feature/home_screen/model/latest_mobile_brands_model.dart';
+import 'package:mobile_news_app/feature/mobile_brands/data/model/mobile_brands_model.dart';
 
 class LatestMobilePorivder with ChangeNotifier {
-  Future<List<LatestMobile>> fetchLatestMobileData() async {
-    List<LatestMobile> mobileDataList = [];
+  Future<List<MobilebrandsModel>> fetchLatestMobileData() async {
+    List<MobilebrandsModel> mobileDataList = [];
     QuerySnapshot querySnapshot =
         await FirebaseFirestore.instance.collection('mobile').get();
 
@@ -13,13 +13,18 @@ class LatestMobilePorivder with ChangeNotifier {
       String brandName = data['brandname'] ?? '';
       String imageUrl = data['image'] ?? '';
       String price = data['price'] ?? '';
-
-      LatestMobile mobileData = LatestMobile(
+      MobilebrandsModel mobile = MobilebrandsModel(
+        price: price,
         brandName: brandName,
         imageUrl: imageUrl,
-        prices: price,
+        specifications: {
+          "Camera": "48 MP, f/1.8, PDAF",
+          "Battery": "5000 mAh, Non-removable",
+          "Display": "6.5 inches, AMOLED",
+        },
       );
-      mobileDataList.add(mobileData);
+
+      mobileDataList.add(mobile);
     }
 
     return mobileDataList;

@@ -1,5 +1,8 @@
-import 'package:mobile_news_app/feature/home_screen/data/firebase_latest_mobile_data.dart';
-import 'package:mobile_news_app/feature/home_screen/model/latest_mobile_brands_model.dart';
+import 'package:mobile_news_app/feature/home_screen/presentation/provider/firebase_latest_mobile_data_provider.dart';
+import 'package:mobile_news_app/feature/home_screen/presentation/provider/mobile_brands_provider.dart';
+import 'package:mobile_news_app/feature/mobile_brands/data/model/mobile_brands_model.dart';
+import 'package:mobile_news_app/feature/mobile_brands/presentation/pages/mobile_brand_page.dart';
+import 'package:mobile_news_app/feature/mobile_brands/presentation/provider/selected_mobile_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../exports.dart';
@@ -71,7 +74,7 @@ class HomePage extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                     letterSpacing: 1.2),
               ),
-              FutureBuilder<List<LatestMobile>>(
+              FutureBuilder<List<MobilebrandsModel>>(
                 future: Provider.of<LatestMobilePorivder>(context)
                     .fetchLatestMobileData(),
                 builder: (context, snapshot) {
@@ -82,7 +85,7 @@ class HomePage extends StatelessWidget {
                   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                     return const Text('No data available.');
                   } else {
-                    List<LatestMobile> latestMobileBrands = snapshot.data!;
+                    List<MobilebrandsModel> latestMobileBrands = snapshot.data!;
 
                     return SizedBox(
                       height: height * 0.25,
@@ -91,16 +94,24 @@ class HomePage extends StatelessWidget {
                         itemCount: latestMobileBrands.length,
                         itemBuilder: (context, index) {
                           final imageUrl = latestMobileBrands[index].imageUrl;
-                          final price = latestMobileBrands[index].prices;
+                          final price = latestMobileBrands[index].price;
                           final brandName = latestMobileBrands[index].brandName;
                           return GestureDetector(
                             onTap: () {
-                              Navigator.pushNamed(context, '/detail');
+                              final provider =
+                                  Provider.of<SelectedMobileProvider>(context,
+                                      listen: false);
+                              provider
+                                  .setSelectedMobile(latestMobileBrands[index]);
+                              Navigator.pushNamed(
+                                context,
+                                '/detail',
+                              );
                             },
                             child: buildLetestMobileBrandSpecs(
                               context,
-                              imageUrl!,
-                              brandName!,
+                              imageUrl,
+                              brandName,
                               price.toString(),
                             ),
                           );
@@ -129,10 +140,24 @@ class HomePage extends StatelessWidget {
                   itemCount: mobileBrands.length,
                   itemBuilder: (context, index) {
                     final mobileBrand = mobileBrands[index];
-                    return buildMobileBrands(
-                      context: context,
-                      brandName: mobileBrand.brandName,
-                      imageUrl: mobileBrand.imageUrl,
+                    return GestureDetector(
+                      onTap: () {
+                        final provider = Provider.of<MobileBrandsProvider>(
+                            context,
+                            listen: false);
+                        provider.setSelectedMobile(mobileBrands[index]);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const MobileBrandPage(),
+                          ),
+                        );
+                      },
+                      child: buildMobileBrands(
+                        context: context,
+                        brandName: mobileBrand.brandName,
+                        imageUrl: mobileBrand.imageUrl,
+                      ),
                     );
                   },
                 ),

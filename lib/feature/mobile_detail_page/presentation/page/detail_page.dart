@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:mobile_news_app/core/utils/constrants/constrants.dart';
 import 'package:mobile_news_app/core/utils/custom_widgets/custom_text.dart';
-import 'package:mobile_news_app/feature/home_screen/data/latest_brands_mobile_data.dart';
-import 'package:mobile_news_app/feature/home_screen/presentation/bloc/latest_mobile_bloc.dart';
+import 'package:mobile_news_app/feature/mobile_brands/presentation/provider/selected_mobile_provider.dart';
 import 'package:mobile_news_app/feature/mobile_detail_page/data/mobile_sepcs_detail_data.dart';
-import 'package:mobile_news_app/feature/mobile_detail_page/data/specification_data.dart';
+import 'package:provider/provider.dart';
 
 class DetailScreen extends StatelessWidget {
   static const String routeName = '/detail';
@@ -16,20 +14,17 @@ class DetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double height = mediaQueryHeight(context);
-    double width = mediaQueryWidth(context);
-    final selectedBrandBloc = BlocProvider.of<SelectedBrandBloc>(context);
-    final selectedIndex = selectedBrandBloc.state.selectedIndex;
-    final selectedBrand = latestMobileBrands[selectedIndex];
+    final selectedMobileProvider = Provider.of<SelectedMobileProvider>(context);
+    final mobile = selectedMobileProvider.selectedMobile;
     return Scaffold(
       appBar: AppBar(
         title: customText(
           context: context,
-          text: selectedBrand.brandName,
+          text: mobile!.brandName,
           color: Colors.white,
         ),
       ),
       body: SingleChildScrollView(
-        // Wrap the entire content with SingleChildScrollView
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -44,11 +39,10 @@ class DetailScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Image.asset(
-                            'assets/images/4.png',
-                            height: height * 0.3,
-                            width: width * 0.4,
-                            fit: BoxFit.fitHeight,
+                          Image.network(
+                            mobile.imageUrl,
+                            height: height * 0.23,
+                            fit: BoxFit.cover,
                           ),
                           const SizedBox(height: 8),
                         ],
@@ -67,7 +61,7 @@ class DetailScreen extends StatelessWidget {
                               EdgeInsets.symmetric(horizontal: height * 0.01),
                           child: customText(
                             context: context,
-                            text: selectedBrand.brandName,
+                            text: mobile.brandName,
                             fontSize: height * 0.025,
                             fontWeight: FontWeight.w400,
                           ),
@@ -100,8 +94,9 @@ class DetailScreen extends StatelessWidget {
                               EdgeInsets.symmetric(horizontal: height * 0.01),
                           child: customText(
                             context: context,
-                            text: 'NPR.  ${selectedBrand.prices}',
+                            text: 'NPR. ${mobile.price}',
                             fontSize: height * 0.022,
+                            fontWeight: FontWeight.bold,
                             letterSpacing: 1.4,
                           ),
                         ),
@@ -147,134 +142,22 @@ class DetailScreen extends StatelessWidget {
               height: height * 0.02,
             ),
             ListView.builder(
+              itemCount: mobile.specifications!.length,
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: specificationData.length,
               itemBuilder: (context, index) {
-                final data = specificationData[index];
+                final String specTitle =
+                    mobile.specifications!.keys.elementAt(index);
+                final String specValue =
+                    mobile.specifications!.values.elementAt(index);
+
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     _specificationRow(
                         context: context,
-                        title: 'Launch Date',
-                        subtitle: data.launchDate),
-                    _specificationRow(
-                        context: context,
-                        title: 'Aspectratio',
-                        subtitle: data.aspectRatio),
-                    _specificationRow(
-                        context: context,
-                        title: 'Audio Jack',
-                        subtitle: data.audioJack),
-                    _specificationRow(
-                        context: context,
-                        title: 'Auto Foucs',
-                        subtitle: data.autoFocus),
-                    _specificationRow(
-                        context: context,
-                        title: 'Quixk Charging',
-                        subtitle: data.batteryQuickCharging),
-                    _specificationRow(
-                        context: context,
-                        title: 'Launch Date',
-                        subtitle: data.launchDate),
-                    _specificationRow(
-                        context: context,
-                        title: 'Launch Date',
-                        subtitle: data.launchDate),
-                    _specificationRow(
-                        context: context,
-                        title: 'Launch Date',
-                        subtitle: data.launchDate),
-                    _specificationRow(
-                        context: context,
-                        title: 'Launch Date',
-                        subtitle: data.launchDate),
-                    _specificationRow(
-                        context: context,
-                        title: 'Launch Date',
-                        subtitle: data.launchDate),
-                    _specificationRow(
-                        context: context,
-                        title: 'Launch Date',
-                        subtitle: data.launchDate),
-                    _specificationRow(
-                        context: context,
-                        title: 'Launch Date',
-                        subtitle: data.launchDate),
-                    _specificationRow(
-                        context: context,
-                        title: 'Launch Date',
-                        subtitle: data.launchDate),
-                    _specificationRow(
-                        context: context,
-                        title: 'Launch Date',
-                        subtitle: data.launchDate),
-                    _specificationRow(
-                        context: context,
-                        title: 'Launch Date',
-                        subtitle: data.launchDate),
-                    _specificationRow(
-                        context: context,
-                        title: 'Launch Date',
-                        subtitle: data.launchDate),
-                    _specificationRow(
-                        context: context,
-                        title: 'Launch Date',
-                        subtitle: data.launchDate),
-                    _specificationRow(
-                        context: context,
-                        title: 'Launch Date',
-                        subtitle: data.launchDate),
-                    _specificationRow(
-                        context: context,
-                        title: 'Launch Date',
-                        subtitle: data.launchDate),
-                    _specificationRow(
-                        context: context,
-                        title: 'Launch Date',
-                        subtitle: data.launchDate),
-                    _specificationRow(
-                        context: context,
-                        title: 'Launch Date',
-                        subtitle: data.launchDate),
-                    _specificationRow(
-                        context: context,
-                        title: 'Launch Date',
-                        subtitle: data.launchDate),
-                    _specificationRow(
-                        context: context,
-                        title: 'Launch Date',
-                        subtitle: data.launchDate),
-                    _specificationRow(
-                        context: context,
-                        title: 'Launch Date',
-                        subtitle: data.launchDate),
-                    _specificationRow(
-                        context: context,
-                        title: 'Launch Date',
-                        subtitle: data.launchDate),
-                    _specificationRow(
-                        context: context,
-                        title: 'Launch Date',
-                        subtitle: data.launchDate),
-                    _specificationRow(
-                        context: context,
-                        title: 'Launch Date',
-                        subtitle: data.launchDate),
-                    _specificationRow(
-                        context: context,
-                        title: 'Launch Date',
-                        subtitle: data.launchDate),
-                    _specificationRow(
-                        context: context,
-                        title: 'Launch Date',
-                        subtitle: data.launchDate),
-                    _specificationRow(
-                        context: context,
-                        title: 'Launch Date',
-                        subtitle: data.launchDate),
+                        title: specTitle,
+                        subtitle: specValue),
                   ],
                 );
               },

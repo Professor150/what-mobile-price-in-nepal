@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../constrants/constrants.dart';
 
@@ -14,28 +15,17 @@ Widget customText({
   TextDecoration? decoration,
   required context,
 }) {
-  Color defultColor = color ?? AppColor.titleTextColor;
-  double defaultFontsize = _isTablet(context)
-      ? MediaQuery.of(context).orientation == Orientation.landscape
-          ? tabletLandscapeFontSize(context)
-          : tabletFontSize(context)
-      : defultFontSize(context);
   return Text(
     maxLines: maxLines,
     text!,
     style: TextStyle(
-      fontFamily: fontFamily,
+      fontFamily: fontFamily ?? GoogleFonts.lato().fontFamily,
       fontWeight: fontWeight,
-      color: color ?? defultColor,
+      color: color ?? Colors.black,
       letterSpacing: letterSpacing,
       overflow: overflow,
       decoration: decoration,
-      fontSize: fontSize ?? defaultFontsize,
+      fontSize: fontSize ?? defultFontSize(context),
     ),
   );
-}
-
-bool _isTablet(BuildContext context) {
-  final shortestSide = MediaQuery.of(context).size.shortestSide;
-  return shortestSide >= 600;
 }
