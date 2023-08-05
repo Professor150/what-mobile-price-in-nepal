@@ -11,10 +11,13 @@ class SelectedMobileProvider with ChangeNotifier {
   }
 
   MobilebrandsModel? _selectedMobile;
-  MobilebrandsModel? get selectedMobile => _selectedMobile;
+
+  MobilebrandsModel? getSelectedMobile() => _selectedMobile;
 
   void setSelectedMobile(MobilebrandsModel mobile) {
     _selectedMobile = mobile;
     notifyListeners();
   }
+
+  MobilebrandsModel? get selectedMobile => _selectedMobile;
 }

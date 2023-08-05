@@ -15,10 +15,13 @@ Widget buildLetestMobileBrandSpecs(
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(height * 0.01),
-            child: Image.network(
-              imageUrl,
-              fit: BoxFit.cover,
-              height: height * 0.16,
+            child: Hero(
+              tag: imageUrl,
+              child: Image.network(
+                imageUrl,
+                fit: BoxFit.cover,
+                height: height * 0.16,
+              ),
             ),
           ),
           const Divider(

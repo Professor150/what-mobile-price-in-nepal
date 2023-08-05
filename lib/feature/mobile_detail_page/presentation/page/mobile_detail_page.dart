@@ -4,23 +4,30 @@ import 'package:mobile_news_app/core/utils/constrants/constrants.dart';
 import 'package:mobile_news_app/core/utils/custom_widgets/custom_text.dart';
 import 'package:mobile_news_app/feature/mobile_brands/presentation/provider/selected_mobile_provider.dart';
 import 'package:mobile_news_app/feature/mobile_detail_page/data/mobile_sepcs_detail_data.dart';
+import 'package:mobile_news_app/feature/mobile_detail_page/presentation/page/full_screen_image_view_page.dart';
 import 'package:provider/provider.dart';
 
-class DetailScreen extends StatelessWidget {
+class MobileDetailScreen extends StatelessWidget {
   static const String routeName = '/detail';
 
-  const DetailScreen({Key? key}) : super(key: key);
+  const MobileDetailScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     double height = mediaQueryHeight(context);
     final selectedMobileProvider = Provider.of<SelectedMobileProvider>(context);
     final mobile = selectedMobileProvider.selectedMobile;
+    final mobileImages = [
+      mobile!.imageUrl,
+      mobile.image1,
+      mobile.image2,
+      mobile.image3,
+    ].whereType<String>().toList();
     return Scaffold(
       appBar: AppBar(
         title: customText(
           context: context,
-          text: mobile!.brandName,
+          text: mobile.brandName,
           color: Colors.white,
         ),
       ),
@@ -39,10 +46,22 @@ class DetailScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Image.network(
-                            mobile.imageUrl,
-                            height: height * 0.23,
-                            fit: BoxFit.cover,
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => FullScreenImageScreen(
+                                  imageUrls: mobileImages,
+                                ),
+                              ));
+                            },
+                            child: Hero(
+                              tag: mobile.imageUrl,
+                              child: Image.network(
+                                mobile.imageUrl,
+                                height: height * 0.23,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                           ),
                           const SizedBox(height: 8),
                         ],
@@ -107,22 +126,22 @@ class DetailScreen extends StatelessWidget {
               ),
             ),
             Container(
-              height: height * 0.11,
+              alignment: Alignment.center,
+              height: height * 0.12,
               width: double.infinity,
               color: Colors.grey.shade200,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: mobileSpecs.length,
+                itemCount: 4,
                 itemBuilder: (context, index) {
                   final specs = mobileSpecs[index];
+                  final specTitle =
+                      mobile.specifications!.values.elementAt(index);
                   return Padding(
                     padding: EdgeInsets.symmetric(horizontal: height * 0.02),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        SizedBox(
-                          height: height * 0.01,
-                        ),
                         Image.asset(
                           specs.imageUrl,
                           fit: BoxFit.cover,
@@ -130,7 +149,7 @@ class DetailScreen extends StatelessWidget {
                         ),
                         customText(
                           context: context,
-                          text: specs.specification,
+                          text: specTitle,
                         ),
                       ],
                     ),
@@ -141,7 +160,11 @@ class DetailScreen extends StatelessWidget {
             SizedBox(
               height: height * 0.02,
             ),
-            ListView.builder(
+            ListView.separated(
+              separatorBuilder: (context, index) => Divider(
+                height: height * 0.01,
+                thickness: 1,
+              ),
               itemCount: mobile.specifications!.length,
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -151,14 +174,10 @@ class DetailScreen extends StatelessWidget {
                 final String specValue =
                     mobile.specifications!.values.elementAt(index);
 
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    _specificationRow(
-                        context: context,
-                        title: specTitle,
-                        subtitle: specValue),
-                  ],
+                return Padding(
+                  padding: EdgeInsets.symmetric(vertical: height * 0.008),
+                  child: _specificationRow(
+                      context: context, title: specTitle, subtitle: specValue),
                 );
               },
             ),
@@ -172,8 +191,9 @@ class DetailScreen extends StatelessWidget {
       {required BuildContext context,
       required String title,
       required String subtitle}) {
+    double height = mediaQueryHeight(context);
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      padding: EdgeInsets.symmetric(horizontal: height * 0.022),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -181,10 +201,14 @@ class DetailScreen extends StatelessWidget {
           customText(
             context: context,
             text: title,
+            fontWeight: FontWeight.w500,
+            fontSize: height * 0.022,
           ),
           customText(
             context: context,
             text: subtitle,
+            fontWeight: FontWeight.bold,
+            fontSize: height * 0.02,
           ),
         ],
       ),

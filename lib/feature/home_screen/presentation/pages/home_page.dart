@@ -1,10 +1,8 @@
 import 'package:mobile_news_app/feature/home_screen/presentation/provider/firebase_latest_mobile_data_provider.dart';
 import 'package:mobile_news_app/feature/home_screen/presentation/provider/mobile_brands_provider.dart';
 import 'package:mobile_news_app/feature/mobile_brands/data/model/mobile_brands_model.dart';
-import 'package:mobile_news_app/feature/mobile_brands/presentation/pages/mobile_brand_page.dart';
 import 'package:mobile_news_app/feature/mobile_brands/presentation/provider/selected_mobile_provider.dart';
 import 'package:provider/provider.dart';
-
 import '../../exports.dart';
 
 class HomePage extends StatelessWidget {
@@ -99,8 +97,7 @@ class HomePage extends StatelessWidget {
                           return GestureDetector(
                             onTap: () {
                               final provider =
-                                  Provider.of<SelectedMobileProvider>(context,
-                                      listen: false);
+                                  context.read<SelectedMobileProvider>();
                               provider
                                   .setSelectedMobile(latestMobileBrands[index]);
                               Navigator.pushNamed(
@@ -142,21 +139,22 @@ class HomePage extends StatelessWidget {
                     final mobileBrand = mobileBrands[index];
                     return GestureDetector(
                       onTap: () {
-                        final provider = Provider.of<MobileBrandsProvider>(
+                        final provider = Provider.of<MobileBrandProvider>(
                             context,
                             listen: false);
                         provider.setSelectedMobile(mobileBrands[index]);
-                        Navigator.push(
+                        Navigator.pushNamed(
                           context,
-                          MaterialPageRoute(
-                            builder: (context) => const MobileBrandPage(),
-                          ),
+                          '/mobileBrand',
                         );
                       },
-                      child: buildMobileBrands(
-                        context: context,
-                        brandName: mobileBrand.brandName,
-                        imageUrl: mobileBrand.imageUrl,
+                      child: Hero(
+                        tag: mobileBrand.imageUrl,
+                        child: buildMobileBrands(
+                          context: context,
+                          brandName: mobileBrand.brandName,
+                          imageUrl: mobileBrand.imageUrl,
+                        ),
                       ),
                     );
                   },
@@ -172,26 +170,16 @@ class HomePage extends StatelessWidget {
                   fontSize: height * 0.03,
                 ),
               ),
-              buildNewsCard(
-                  context: context,
-                  title: 'Samsung Mobile New Realease Realease',
-                  description:
-                      'Samsung Galaxy S24 Ultra Realease In August 28, Live event in Ameraica,Nothing Planing to lauch new phone Nothing 3. Iphone 15 launching date is march 21'),
-              buildNewsCard(
-                  context: context,
-                  title: 'Samsung Mobile New Realease Realease',
-                  description:
-                      'Samsung Galaxy S24 Ultra Realease In August 28, Live event in Amersaica,Nothing Planing to lauch new phone Nothing 3. Iphone 15 launching date is march 21'),
-              buildNewsCard(
-                  context: context,
-                  title: 'Samsung Mobile New Realease Realease',
-                  description:
-                      'Samsung Galaxy S24 Ultra Realease In August 28, Live event in Ameraica,Nothing Planing to lauch new phone Nothing 3. Iphone 15 launching date is march 21'),
-              buildNewsCard(
-                  context: context,
-                  title: 'Samsung Mobile New Realease Realease',
-                  description:
-                      'Samsung Galaxy S24 Ultra Realease In August 28, Live event in Ameraica,Nothing Planing to lauch new phone Nothing 3. Iphone 15 launching date is march 21'),
+              Column(
+                children: List.generate(10, (index) {
+                  return buildNewsCard(
+                    context: context,
+                    title: 'Samsung Mobile New Release',
+                    description:
+                        'Samsung Galaxy S24 Ultra Release In August 28, Live event in America, Nothing Planning to launch a new phone, Nothing 3. iPhone 15 launching date is March 21.',
+                  );
+                }),
+              ),
             ],
           ),
         ),
