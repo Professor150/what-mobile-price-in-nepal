@@ -1,7 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile_news_app/feature/home_screen/data/firebase_latest_mobile_data.dart';
-import 'package:mobile_news_app/feature/mobile_detail_page/presentation/page/detail_page.dart';
+import 'package:mobile_news_app/feature/home_screen/presentation/provider/firebase_latest_mobile_data_provider.dart';
+import 'package:mobile_news_app/feature/home_screen/presentation/provider/mobile_brands_provider.dart';
+import 'package:mobile_news_app/feature/mobile_brands/presentation/pages/mobile_brand_page.dart';
+import 'package:mobile_news_app/feature/mobile_brands/presentation/provider/selected_mobile_provider.dart';
+import 'package:mobile_news_app/feature/mobile_detail_page/presentation/page/mobile_detail_page.dart';
 import 'package:mobile_news_app/feature/home_screen/presentation/pages/home_page.dart';
 import 'package:provider/provider.dart';
 
@@ -22,6 +25,12 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => LatestMobilePorivder(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => SelectedMobileProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => MobileBrandProvider(),
+        ),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -34,7 +43,8 @@ class MyApp extends StatelessWidget {
         initialRoute: HomePage.routeName,
         routes: {
           HomePage.routeName: (context) => const HomePage(),
-          DetailScreen.routeName: (context) => const DetailScreen(),
+          MobileDetailScreen.routeName: (context) => const MobileDetailScreen(),
+          MobileBrandPage.routeName: (context) => const MobileBrandPage(),
         },
       ),
     );
